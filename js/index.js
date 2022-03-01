@@ -1,19 +1,37 @@
 const getphones = () => {
   // input text
   const inputText = document.getElementById("input-field");
-  const inputValue = inputText.value.toLowerCase();
+  const inputValue = inputText.value;
+  const searchInput = inputValue.toLowerCase();
   // clear textfield
   inputText.value = "";
   // fetch api
-  fetch(`https://openapi.programming-hero.com/api/phones?search=${inputValue}`)
+  fetch(`https://openapi.programming-hero.com/api/phones?search=${searchInput}`)
     .then((res) => res.json())
-    .then((data) => displayPhones(data.data));
+    .then((data) => displayPhones(data.data, inputValue));
 };
 // displayPhones functions
-const displayPhones = (phones) => {
-  const displayPhones = document.getElementById("display-phones");
-  //   empty text fild after every serch
-  displayPhones.textContent = "";
+const displayPhones = (phones, searchValue) => {
+  const phoneDisplay = document.getElementById("display-phones");
+  const resultDiv = document.getElementById("result-text");
+  //   empty text fild after every search
+  phoneDisplay.textContent = "";
+  //   empty result field after every search
+  resultDiv.textContent = "";
+
+  if (phones.length > 0) {
+    // search result number show in UI
+    const resultText = document.createElement("div");
+    resultText.innerHTML = `<p class="text-success">${phones.length} results found for ${searchValue} </p>`;
+    resultDiv.appendChild(resultText);
+  } else {
+    //no search results found show in UI
+    const resultText = document.createElement("div");
+    resultText.innerHTML = `<p class="text-danger">No results found for <span class="fw-bold fs-5"> ${searchValue} </span></p>`;
+    resultDiv.appendChild(resultText);
+  }
+
+  // for each for phones
   phones.forEach((phone) => {
     console.log(phone);
     const phoneDiv = document.createElement("div");
@@ -26,9 +44,9 @@ const displayPhones = (phones) => {
                 <p class="card-text">
                 <span class="fw-bold">Brand : </span>${phone.brand}
                 </p>
-                <a href="#" class="btn btn-outline-info fw-bold">Explore More</a>
+                <a href="#" class="btn btn-outline-info fw-bold shadow-sm">Explore More</a>
               </div>
             </div>`;
-    displayPhones.appendChild(phoneDiv);
+    phoneDisplay.appendChild(phoneDiv);
   });
 };
