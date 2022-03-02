@@ -1,14 +1,14 @@
 const getphones = () => {
   // input text
-  const inputText = document.getElementById("input-field");
-  const inputValue = inputText.value;
-  const searchInput = inputValue.toLowerCase();
+  const searchInput = document.getElementById("input-field");
+  const inputText = searchInput.value;
+  const InputValue = inputText.toLowerCase();
   // clear textfield
-  inputText.value = "";
+  searchInput.value = "";
   // fetch api
-  fetch(`https://openapi.programming-hero.com/api/phones?search=${searchInput}`)
+  fetch(`https://openapi.programming-hero.com/api/phones?search=${InputValue}`)
     .then((res) => res.json())
-    .then((data) => displayPhones(data.data, inputValue));
+    .then((data) => displayPhones(data.data, inputText));
 };
 // displayPhones functions
 const displayPhones = (phones, searchValue) => {
@@ -34,7 +34,7 @@ const displayPhones = (phones, searchValue) => {
     resultDiv.appendChild(resultText);
   }
   // 20 results condition
-  if (phones.length >= 19) {
+  if (phones.length > 19) {
     const phoneQuantity = phones.slice(0, 20);
     phoneQuantity.forEach((phone) => {
       const phoneDiv = document.createElement("div");
@@ -81,7 +81,6 @@ const getApiId = (dtailsId) => {
 };
 // show dtails is UI
 const displayDtails = (dtails) => {
-  console.log(dtails);
   const dtailsDiv = document.createElement("div");
   const dtailsContainer = document.getElementById("show-dtails");
   dtailsDiv.classList.add("card");
@@ -99,7 +98,7 @@ const displayDtails = (dtails) => {
     <p class="card-text">
     <p class="fs-4 fw-bold">${dtails.name}</p>
     <p>${relese}</p>
-    <p><span class="fw-bold">storage : </span>${dtails.mainFeatures.storage}</p>
+    <p><span class="fw-bold">Storage : </span>${dtails.mainFeatures.storage}</p>
     <p><span class="fw-bold">Chipset : </span>${dtails.mainFeatures.chipSet}</p>
     <p><span class="fw-bold">Memory : </span>${dtails.mainFeatures.memory}</p>
     <p><span class="fw-bold">Display : </span>${
@@ -109,8 +108,8 @@ const displayDtails = (dtails) => {
       " , "
     )}</p>
     <p><span class="fw-bold">Others : </span>
-    <li> Wlan : ${dtails.others?.WLAN ? dtails.others.WLAN : "No Info"}</li>
-    <li> Blootooth : ${
+    <li> WLan : ${dtails.others?.WLAN ? dtails.others.WLAN : "No Info"}</li>
+    <li> Bluetooth : ${
       dtails.others?.Bluetooth ? dtails.others.Bluetooth : "No Info"
     }</li>
     <li> Gps : ${dtails.others?.GPS ? dtails.others.GPS : "No Info"}</li>
