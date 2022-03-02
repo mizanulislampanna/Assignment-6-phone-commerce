@@ -33,25 +33,45 @@ const displayPhones = (phones, searchValue) => {
     resultText.innerHTML = `<p class="text-danger">No results found for <span class="fw-bold fs-5"> ${searchValue} </span></p>`;
     resultDiv.appendChild(resultText);
   }
+  // 20 results condition
+  if (phones.length >= 19) {
+    const phoneQuantity = phones.slice(0, 20);
+    phoneQuantity.forEach((phone) => {
+      const phoneDiv = document.createElement("div");
+      phoneDiv.classList.add("col");
+      phoneDiv.innerHTML = `
+      <div class="card shadow-sm">
+                <img src="${phone.image}" class="card-img-top w-50 mx-auto my-3" alt="..." />
+                <div class="card-body">
+                  <h5 class="card-title fw-bold">${phone.phone_name}</h5>
+                  <p class="card-text">
+                  <span class="fw-bold">Brand : </span>${phone.brand}
+                  </p>
+                  <a onclick="getApiId('${phone.slug}')" href="#" class="btn btn-outline-info fw-bold shadow-sm">Explore More</a>
+                </div>
+              </div>`;
+      phoneDisplay.appendChild(phoneDiv);
+    });
+  } else {
+    phones.forEach((phone) => {
+      const phoneDiv = document.createElement("div");
+      phoneDiv.classList.add("col");
+      phoneDiv.innerHTML = `
+      <div class="card shadow-sm">
+                <img src="${phone.image}" class="card-img-top w-50 mx-auto my-3" alt="..." />
+                <div class="card-body">
+                  <h5 class="card-title fw-bold">${phone.phone_name}</h5>
+                  <p class="card-text">
+                  <span class="fw-bold">Brand : </span>${phone.brand}
+                  </p>
+                  <a onclick="getApiId('${phone.slug}')" href="#" class="btn btn-outline-info fw-bold shadow-sm">Explore More</a>
+                </div>
+              </div>`;
+      phoneDisplay.appendChild(phoneDiv);
+    });
+  }
 
   // for each for phones
-  phones.forEach((phone) => {
-    // console.log(phone);
-    const phoneDiv = document.createElement("div");
-    phoneDiv.classList.add("col");
-    phoneDiv.innerHTML = `
-    <div class="card shadow-sm">
-              <img src="${phone.image}" class="card-img-top w-50 mx-auto my-3" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title fw-bold">${phone.phone_name}</h5>
-                <p class="card-text">
-                <span class="fw-bold">Brand : </span>${phone.brand}
-                </p>
-                <a onclick="getApiId('${phone.slug}')" href="#" class="btn btn-outline-info fw-bold shadow-sm">Explore More</a>
-              </div>
-            </div>`;
-    phoneDisplay.appendChild(phoneDiv);
-  });
 };
 // call dtails api by id
 const getApiId = (dtailsId) => {
@@ -65,17 +85,40 @@ const displayDtails = (dtails) => {
   const dtailsDiv = document.createElement("div");
   const dtailsContainer = document.getElementById("show-dtails");
   dtailsDiv.classList.add("card");
+  // releaseDate error
+  let relese = dtails.releaseDate;
+  if (relese == "") {
+    relese = "No relese date found";
+  }
+
   dtailsDiv.innerHTML = `
- <img class="w-50 mx-auto my-3" src="${dtails.image}" class="card-img-top" alt="...">
+ <img class="w-50 mx-auto my-3" src="${
+   dtails.image
+ }" class="card-img-top" alt="...">
   <div class="card-body">
     <p class="card-text">
     <p class="fs-4 fw-bold">${dtails.name}</p>
-    <p>${dtails.releaseDate}</p>
+    <p>${relese}</p>
     <p><span class="fw-bold">storage : </span>${dtails.mainFeatures.storage}</p>
     <p><span class="fw-bold">Chipset : </span>${dtails.mainFeatures.chipSet}</p>
     <p><span class="fw-bold">Memory : </span>${dtails.mainFeatures.memory}</p>
-    <p><span class="fw-bold">Display : </span>${dtails.mainFeatures.displaySize}</p>
+    <p><span class="fw-bold">Display : </span>${
+      dtails.mainFeatures.displaySize
+    }</p>
+    <p><span class="fw-bold">Sensors : </span>${dtails.mainFeatures.sensors.join(
+      " , "
+    )}</p>
+    <p><span class="fw-bold">Others : </span>
+    <li> Wlan : ${dtails.others?.WLAN ? dtails.others.WLAN : "No Info"}</li>
+    <li> Blootooth : ${
+      dtails.others?.Bluetooth ? dtails.others.Bluetooth : "No Info"
+    }</li>
+    <li> Gps : ${dtails.others?.GPS ? dtails.others.GPS : "No Info"}</li>
+    <li> NFC : ${dtails.others?.NFC ? dtails.others.NFC : "No Info"}</li>
+    <li> Radio : ${dtails.others?.NFC ? dtails.others.Radio : "No Info"}</li>
+    </p>
     </p>
   </div>`;
+
   dtailsContainer.appendChild(dtailsDiv);
 };
